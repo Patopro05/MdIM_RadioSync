@@ -6,7 +6,7 @@ import qrcode
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'radiosync_core.settings')
 django.setup()
 
-# 2. SEGUNDO: Importar los modelos (ahora que Django ya cargó)
+# 2. SEGUNDO: Importar los modelos
 from clinica.models import Paciente
 
 def generate_patient_qr(patient_id):
