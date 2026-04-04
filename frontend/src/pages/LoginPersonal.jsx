@@ -1,16 +1,35 @@
 import './Login.css';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-function Login() {
+export default function Login() {
   const [usuario, setUsuario] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
-    console.log("Usuario:", usuario);
-    console.log("Contraseña:", password);
+  const navigate = useNavigate();
 
-    // Aquí luego conectarás con backend
-  };
+  const handleLogin = async(e) => {
+    e.preventDefault();
+
+    console.log("Intentando usuario:", usuario);
+    
+    try {
+      const respuesta = await axios.post('http://127.0.0.1:8000/api/token/', {
+        username: usuario,
+        password: password
+      });
+
+      console.log("Acceso garantizado", respuesta.data);
+      localStorage.setItem('acces_token', respuesta.data.access);
+      localStorage.setItem('refresh_token', respuesta.data.refresh);
+
+      navigate('/medico');
+    } catch(error) {
+      console.error("Error de inicio:", error);
+      alert("Usuario o contraseña incorrectos.");
+    }
+  };   
 
   return (
     <div className="container">
@@ -49,5 +68,3 @@ function Login() {
     </div>
   );
 }
-
-export default Login;
