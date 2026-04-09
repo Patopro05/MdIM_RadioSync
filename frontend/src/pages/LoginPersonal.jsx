@@ -21,7 +21,7 @@ export default function Login() {
       });
 
       console.log("Acceso garantizado", respuesta.data);
-      localStorage.setItem('acces_token', respuesta.data.access);
+      localStorage.setItem('access_token', respuesta.data.access);
       localStorage.setItem('refresh_token', respuesta.data.refresh);
 
       navigate('/medico');

@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import LoginPersonal from "./pages/LoginPersonal";
 import LoginPaciente from "./pages/LoginPaciente";
 import DashboardMedico from "./pages/DashboardMedico";
+import DashboardTecnico from "./pages/DashboardTecnico";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/personal" element={<LoginPersonal />} />
         <Route path="/paciente" element={<LoginPaciente />} />
         <Route path="/medico" element={<DashboardMedico />} />
+        <Route path="/tecnico" element={<DashboardTecnico />} />
         <Route path="*" element={<h1 style={{textAlign: 'center', marginTop: '50px'}}>Error 404: Esta página no existe todavía, siguelo revisando</h1>} />
       </Routes>
     </BrowserRouter>

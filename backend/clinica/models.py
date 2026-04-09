@@ -45,7 +45,7 @@ class EstudioRadiologico(models.Model):
     radiologo_asignado = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='estudios_radiologo')
     
     # El diagnóstico final
-    diagnostico_clinico = models.TextField(blank=True, null=True)
+    comentario = models.TextField(blank=True, null=True)
     
     def __str__(self):
         return f"{self.get_tipo_estudio_display()} - {self.paciente.nombre_completo}"
