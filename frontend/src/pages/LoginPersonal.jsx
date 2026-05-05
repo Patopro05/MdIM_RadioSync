@@ -1,63 +1,69 @@
 import './Login.css';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 
-export default function Login() {
-  const [usuario, setUsuario] = useState('');
-  const [password, setPassword] = useState('');
-
+function LoginPersonal() {
   const navigate = useNavigate();
 
-  const handleLogin = async(e) => {
-    e.preventDefault();
+  const [usuario, setUsuario] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
-    console.log("Intentando usuario:", usuario);
-    
-    try {
-      const respuesta = await axios.post('http://127.0.0.1:8000/api/token/', {
-        username: usuario,
-        password: password
-      });
-
-      console.log("Acceso garantizado", respuesta.data);
-      localStorage.setItem('access_token', respuesta.data.access);
-      localStorage.setItem('refresh_token', respuesta.data.refresh);
-
-      navigate('/medico');
-    } catch(error) {
-      console.error("Error de inicio:", error);
-      alert("Usuario o contraseña incorrectos.");
+  const handleLogin = () => {
+    //Aquí luego conectarás con backend
+    if (usuario && password) {
+      console.log("Login correcto");
+      navigate("/dashboard"); //cambia esto después
+    } else {
+      alert("Completa todos los campos");
     }
-  };   
+  };
 
   return (
     <div className="container">
 
       <div className="overlay">
 
-        <h1>Iniciar Sesión</h1>
+        <h1>Iniciar sesión</h1>
 
+        <p className="login-subtitle">
+          Accede como personal para gestionar estudios
+        </p>
+
+        {/* INPUT USUARIO */}
         <div className="input-group">
-          <div className="icon-loguser"></div>
+          <span className="icon-loguser"><a href="https://www.flaticon.com/free-icons/user" title="user icons"></a></span>
           <input
             type="text"
-            placeholder="Nombre de usuario"
+            placeholder="Usuario"
             value={usuario}
             onChange={(e) => setUsuario(e.target.value)}
           />
         </div>
 
+        {/* INPUT PASSWORD */}
         <div className="input-group">
-          <div className="icon-logpasword"></div>
+          <span className="icon-pasw"><a href="https://www.flaticon.com/free-icons/padlock" title="padlock icons"></a></span>
           <input
-            type="password"
+            type={showPassword ? "text" : "password"}
             placeholder="Contraseña"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
+          <span 
+            className="eye"
+            onClick={() => setShowPassword(!showPassword)}
+          ><a href="https://www.flaticon.com/free-icons/eyes" title="eyes icons"></a>
+          </span>
         </div>
 
+        {/* OPCIONES */}
+        <div className="options">
+          <span>Recuérdame</span>
+          <span className="link">¿Olvidaste tu contraseña?</span>
+        </div>
+
+        {/* BOTÓN */}
         <button className="login-btn" onClick={handleLogin}>
           Iniciar Sesión
         </button>
@@ -68,3 +74,5 @@ export default function Login() {
     </div>
   );
 }
+
+export default LoginPersonal;

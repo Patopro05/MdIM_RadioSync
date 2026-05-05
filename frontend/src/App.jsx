@@ -6,6 +6,8 @@ import LoginPaciente from "./pages/LoginPaciente";
 import DashboardMedico from "./pages/DashboardMedico";
 import DashboardTecnico from "./pages/DashboardTecnico";
 
+
+
 function App() {
   return (
     <BrowserRouter>
