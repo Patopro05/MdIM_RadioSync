@@ -1,0 +1,288 @@
+.dashboard-container {
+
+  width: 100%;
+  height: 100vh;
+  
+  font-family: Arial, sans-serif;
+
+  background-image: url('hospital-bg.png');
+  background-size: cover;
+  background-position: center;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  padding: 20px;
+
+  box-sizing: border-box;
+
+  overflow: scroll;
+
+}
+
+.dashboard-overlay {
+
+  width: 100%;
+  
+  border-radius: 20px;
+
+  background: rgba(0,0,0,0.6);
+
+  display: flex;
+  gap: 20px;
+
+  padding: 20px ;
+
+  backdrop-filter: blur(4px);
+
+}
+
+/* LEFT PANEL */
+
+.waiting-room {
+
+  width: 45%;
+  border-radius: 10px;
+
+  background: #efefef;
+
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+
+}
+
+.waiting-room h1 {
+
+  font-size: 20px;
+  margin-bottom: 20px;
+  
+}
+
+.waiting-room table {
+  width: 100%;
+  border-collapse: collapse;
+
+}
+
+.waiting-room th,
+.waiting-room td {
+
+  border: 2px solid #bdbdbd;
+
+  padding: 14px 8px;
+  font-size: 15px;
+
+  text-align: center;
+
+}
+
+.waiting-room th {
+
+  font-weight: bold;
+
+}
+
+
+.patient-form {
+
+  flex: 1;
+
+  color: white;
+
+  padding: 10px 15px;
+
+}
+
+.patient-form h1 {
+
+  font-size: 30px;
+
+  margin-bottom: 25px;
+
+}
+
+.patient-form form {
+
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+
+}
+
+.input-box {
+
+  display: flex;
+  flex-direction: column;
+
+  position: relative;
+
+}
+
+.input-box label {
+
+  font-size: 20px;
+  font-weight: bold;
+
+  margin-bottom: 8px;
+
+}
+
+.input-box span {
+
+  position: absolute;
+
+  right: 0;
+  bottom: -18px;
+
+  font-size: 0.8rem;
+  font-style: italic;
+  color: #d9d9d9;
+
+
+}
+
+.input-box input,
+.input-box select {
+
+  background: transparent;
+
+  border: none;
+  border-bottom: 2px solid white;
+
+  padding: 10px 0;
+
+  color: rgb(255, 255, 255);
+  
+  font-size: 1rem;
+
+  outline: none;
+
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
+}
+
+.option-list {
+ color: #16254b;
+
+}
+
+.row {
+
+  display: flex;
+  gap: 40px;
+
+}
+
+.row .input-box {
+
+  flex: 1;
+
+}
+
+.datetime {
+
+  display: flex;
+  gap: 20px;
+
+}
+
+.register-btn {
+
+  margin-top: 15px;
+
+  background: #16254b;
+
+  border: none;
+
+  color: white;
+
+  padding: 20px;
+  font-size: 20px;
+  font-weight: bold;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+
+}
+
+.register-btn:hover {
+
+  background: #23376d;
+
+}
+
+/* QR */
+
+.qr-box {
+
+  margin-top: 40px;
+
+}
+
+.fake-qr {
+
+  width: 120px;
+  height: 120px;
+
+  background: white;
+
+  color: black;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 1.5rem;
+  font-weight: bold;
+
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 1100px) {
+
+  .dashboard-overlay {
+
+    flex-direction: column;
+
+  }
+
+  .waiting-room {
+
+    width: 100%;
+
+  }
+
+}
+
+@media (max-width: 768px) {
+
+  .patient-form h1 {
+
+    font-size: 2rem;
+
+  }
+
+  .waiting-room h1 {
+
+    font-size: 1.8rem;
+
+  }
+
+  .row {
+
+    flex-direction: column;
+
+    gap: 20px;
+
+  }
+
+}
