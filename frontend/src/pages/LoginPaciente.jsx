@@ -20,10 +20,10 @@ function LoginPaciente() {
             type="text"
             placeholder="Número de usuario/Escanear QR"
             value={codigo} /*CONECTAR AQUI CON LO QUE DEVUELVA EL ESP32*/
-            onChange={(e) => setCodigo(e.target.value)}
+            onChange={(e) => setCodigo(e.target.value)}/*no se en que parte va pero la variable de qr en el back es 'qr_code'*/
           />
         </div>
-
+        
         <button className="login-btn" onClick={handleAccess}>
           Acceder
         </button>

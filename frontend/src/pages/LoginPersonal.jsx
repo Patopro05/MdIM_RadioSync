@@ -5,15 +5,15 @@ import { useNavigate } from "react-router-dom";
 function LoginPersonal() {
   const navigate = useNavigate();
 
-  const [usuario, setUsuario] = useState('');
-  const [password, setPassword] = useState('');
+  const [Username, setUsuario] = useState('');
+  const [Password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = () => {
-    //Aquí luego conectarás con backend
-    if (usuario && password) {
+    //Aquí luego conectar
+    if (Username && Password) {
       console.log("Login correcto");
-      navigate("/dashboard"); //cambia esto después
+      navigate("/tecnico"); 
     } else {
       alert("Completa todos los campos");
     }
@@ -36,7 +36,7 @@ function LoginPersonal() {
           <input
             type="text"
             placeholder="Usuario"
-            value={usuario}
+            value={Username}
             onChange={(e) => setUsuario(e.target.value)}
           />
         </div>
@@ -47,7 +47,7 @@ function LoginPersonal() {
           <input
             type={showPassword ? "text" : "password"}
             placeholder="Contraseña"
-            value={password}
+            value={Password}
             onChange={(e) => setPassword(e.target.value)}
           />
           <span 
