@@ -13,7 +13,7 @@ function Home() {
         <h2>RADIOSYNC</h2>
 
         <div className="nav-links">
-          <button onClick={() => navigate("/paciente")}>
+          <button onClick={() => navigate("/personal")}>
               Inicio
             </button>
           <span onClick={() => setModal("acerca")}>Acerca de</span>

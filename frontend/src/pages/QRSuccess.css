@@ -1,0 +1,216 @@
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.qr-page {
+
+  width: 100%;
+  min-height: 100vh;
+  background-image: url('hospital-bg.png');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.qr-overlay {
+  width: 100%;
+  min-height: 100vh;
+  background: rgba(0,0,0,0.65);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  padding: 30px;
+}
+
+
+/* BOTON REGRESAR */
+
+.back-btn {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: white;
+  padding: 12px 18px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.back-btn:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+/* CARD */
+.qr-card {
+  width: 420px;
+  max-width: 95%;
+  background: rgba(10, 20, 40, 0.95);
+  border-radius: 25px;
+  padding: 35px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 0 30px rgba(0,0,0,0.5);
+}
+
+.qr-card h1 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.success-text {
+  color: #d4d4d4;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+
+/* QR */
+
+.qr-container {
+  width: 240px;
+  height: 240px;
+  background: white;
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+  margin-bottom: 30px;
+}
+
+.qr-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+
+/* INFO */
+
+.patient-info {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+  padding-bottom: 10px;
+}
+
+.info-row span {
+  color: #bfc7d5;
+  font-size: 0.9rem;
+}
+
+.info-row p {
+  font-weight: bold;
+}
+
+
+/* BOTONES */
+
+.qr-buttons {
+  width: 100%;
+  display: flex;
+  gap: 15px;
+}
+
+.qr-buttons button {
+  flex: 1;
+  padding: 14px;
+  border: none;
+  border-radius: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+
+/* DESCARGAR */
+
+.download-btn {
+  background: #16254b;
+  color: white;
+}
+
+.download-btn:hover {
+  background: #243970;
+}
+
+
+/* IMPRIMIR */
+
+.print-btn {
+  background: white;
+  color: #16254b;
+}
+
+.print-btn:hover {
+  background: #d9d9d9;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 768px) {
+  .qr-card {
+    padding: 25px 20px;
+  }
+
+  .qr-container {
+    width: 200px;
+    height: 200px;
+  }
+
+  .qr-buttons {
+    flex-direction: column;
+  }
+
+}
+
+
+/* PRINT */
+
+@media print {
+  .back-btn,
+  .qr-buttons {
+    display: none;
+  }
+
+  .qr-overlay {
+    background: white;
+  }
+
+  .qr-card {
+    box-shadow: none;
+    background: white;
+    color: black;
+  }
+
+}

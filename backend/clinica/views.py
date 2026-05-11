@@ -77,7 +77,7 @@ def gestion_pacientes(request):
                 peso_kg=peso_kg,
                 estatura_cm=estatura_cm
             )
-            
+
             return Response({
                 'id': nuevo_username,
                 'nombre': nuevo_paciente.nombre_completo,

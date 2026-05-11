@@ -5,7 +5,7 @@ import LoginPersonal from "./pages/LoginPersonal";
 import LoginPaciente from "./pages/LoginPaciente";
 import DashboardMedico from "./pages/DashboardMedico";
 import DashboardTecnico from "./pages/DashboardTecnico";
-
+import QRSuccess from './pages/QRSuccess';
 
 
 function App() {
@@ -17,6 +17,7 @@ function App() {
         <Route path="/paciente" element={<LoginPaciente />} />
         <Route path="/medico" element={<DashboardMedico />} />
         <Route path="/tecnico" element={<DashboardTecnico />} />
+        <Route path="/qr-generado" element={<QRSuccess />} />
         <Route path="*" element={<h1 style={{textAlign: 'center', marginTop: '50px'}}>Error 404: Esta página no existe todavía, siguelo revisando</h1>} />
       </Routes>
     </BrowserRouter>

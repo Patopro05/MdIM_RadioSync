@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import './DashboardTecnico.css';
 
@@ -74,6 +75,18 @@ export default function DashboardTecnico() {
       setPacientes([...pacientes, respuesta.data]);
 
       setQrGenerado(respuesta.data.id);
+      
+      const navigate = useNavigate();
+
+      navigate('/qr-generados', {
+            state: {
+              qr: respuesta.data.qr_url,
+              nombre: respuesta.data.nombre,
+              id: respuesta.data.id,
+              estudio: respuesta.data.estudio
+            }
+
+          });
 
       // LIMPIAR FORM
       setNombre('');
@@ -99,7 +112,6 @@ export default function DashboardTecnico() {
 
       <div className="dashboard-overlay">
 
-        {/* SALA DE ESPERA */}
         <div className="waiting-room">
 
           <h1>SALA DE ESPERA</h1>
@@ -157,7 +169,6 @@ export default function DashboardTecnico() {
 
             </div>
 
-            {/* COMENTARIOS */}
             <div className="input-box">
 
               <label>Comentarios</label>
@@ -172,7 +183,6 @@ export default function DashboardTecnico() {
 
             </div>
 
-            {/* FECHA NACIMIENTO + SEXO */}
             <div className="row">
 
               <div className="input-box">
@@ -205,7 +215,6 @@ export default function DashboardTecnico() {
 
             </div>
 
-            {/* ESTUDIO + FECHA/HORA */}
             <div className="row">
 
               <div className="input-box">
