@@ -1,0 +1,184 @@
+.medico-container {
+  width: 100%;
+  background-image: url('/hospital-bg.png');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+  font-family: Arial, sans-serif;
+}
+
+.medico-overlay {
+  width: 95%;
+  max-width: 1500px;
+  background: rgba(0,0,0,0.65);
+  backdrop-filter: blur(5px);
+  border-radius: 20px;
+  padding: 25px;
+  color: white;
+}
+
+.section-title {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 25px;
+}
+
+.second-title {
+  margin-top: 15px;
+  color: white;
+}
+
+.info-card {
+  background: rgba(0,0,0,0.35);
+  border-radius: 10px;
+  padding: 15px;
+}
+
+.top-name {
+  margin-bottom: 30px;
+}
+
+.bottom-row {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+}
+
+.input-box {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+}
+
+.input-box.full {
+  width: 100%;
+}
+
+.input-box.small {
+  max-width: 200px;
+}
+
+.input-box label {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.input-box p {
+  border-bottom: 2px solid white;
+  padding-bottom: 10px;
+}
+
+
+.study-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 15px;
+  margin-top: -15px;
+}
+
+.estado-container {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.estado-container label {
+  font-weight: bold;
+}
+
+.estado-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.estado-dot {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+}
+
+.estado-dot.pendiente {
+  background: #e40000;
+}
+
+.estado-dot.proceso {
+  background: #f1c40f;
+}
+
+.estado-dot.realizado {
+  background: #2ecc71;
+}
+
+.estado-btn {
+  width: fit-content;
+  padding: 10px 15px;
+  background: #16254b;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.estado-btn:hover {
+  background: #23376d;
+}
+
+.comments-side {
+  display: flex;
+  flex-direction: column;
+}
+
+.comments-side label {
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.comments-side textarea {
+  height: 180px;
+  background: rgba(255,255,255,0.15);
+  border: none;
+  resize: none;
+  padding: 15px;
+  color: white;
+  outline: none;
+}
+
+
+@media (max-width: 1200px) {
+  .study-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .bottom-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .qr-container {
+    align-self: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .section-title {
+    font-size: 2rem;
+  }
+
+  .input-box label,
+  .estado-container label,
+  .comments-side label {
+    font-size: 1.4rem;
+  }
+
+  .input-box p {
+    font-size: 1rem;
+  }
+}
