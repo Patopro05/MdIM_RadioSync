@@ -196,21 +196,47 @@
 
 
 /* PRINT */
-
 @media print {
-  .back-btn,
-  .qr-buttons {
-    display: none;
+  /* Ocultar TODO por defecto */
+  body * {
+    visibility: hidden;
   }
 
-  .qr-overlay {
-    background: white;
+  /* Quitar el fondo del hospital */
+  .qr-page {
+    background: none !important;
   }
 
+  /* Solo hacer visible la tarjeta y su contenido */
+  .qr-card, .qr-card * {
+    visibility: visible;
+  }
+
+  /* Centrar la tarjeta en la hoja y limpiarla */
   .qr-card {
-    box-shadow: none;
-    background: white;
-    color: black;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    max-width: 400px;
+    background: white !important;
+    color: black !important;
+    box-shadow: none !important;
+    border: 2px dashed black !important; /* Borde estilo ticket para recortar */
+    padding: 20px;
   }
 
+  /* Ocultar cosas innecesarias para el ticket impreso */
+  .qr-buttons, 
+  .back-btn, 
+  .success-text,
+  .qr-card h1 {
+    display: none !important;
+  }
+
+  /* Asegurar que las letras de la info salgan negras */
+  .info-row span, .info-row p {
+    color: black !important;
+  }
 }

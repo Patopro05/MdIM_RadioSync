@@ -1,4 +1,4 @@
-
+import { useEffect } from "react"; // <--- ESTA ES LA LÍNEA MÁGICA QUE FALTA
 import "./QRSuccess.css";
 
 import {
@@ -17,10 +17,24 @@ export default function QRSuccess() {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const {qr,nombre,id,estudio}=location.state;
+  const { qr, nombre, id, estudio } = location.state || {};
 
   // URL COMPLETA DEL QR
-  const qrImage = `http://127.0.0.1:8000${qr}`;
+ // 2. URL segura
+  const backendURL = "http://127.0.0.1:8000";
+  const qrImage = qr 
+    ? (qr.startsWith('http') ? qr : `${backendURL}${qr.startsWith('/') ? '' : '/'}${qr}`)
+    : ""; // Si no hay qr, queda vacío
+
+  // 3. REDIRECCIÓN DE EMERGENCIA: Si alguien entró directo o se perdieron los datos, lo regresamos al técnico
+  useEffect(() => {
+    if (!location.state) {
+      navigate('/tecnico');
+    }
+  }, [location.state, navigate]);
+
+  // Si no hay datos, ocultamos la pantalla para que no se vea rota mientras el useEffect hace la redirección
+  if (!location.state) return null;
 
   const handlePrint = () => {
     window.print();
@@ -29,6 +43,7 @@ export default function QRSuccess() {
   const handleDownload = async () => {
     try {
       const response = await fetch(qrImage);
+      if (!response.ok) throw new Error("No se pudo cargar la imagen del servidor");
       const blob = await response.blob();
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
@@ -38,6 +53,7 @@ export default function QRSuccess() {
       document.body.removeChild(link);
     } catch (error) {
       console.error("Error descargando QR:", error);
+      window.open(qrImage, '_blank');
     }
   };
 
@@ -60,10 +76,11 @@ export default function QRSuccess() {
           </p>
           {/*qr*/}
           <div className="qr-container">
-            <img
-              src={qrImage}
-              alt="QR Paciente"
-            />
+           {qrImage ? (
+              <img src={qrImage} alt="QR Paciente" />
+            ) : (
+              <p style={{color: 'black', textAlign: 'center'}}>QR no generado</p>
+            )}
           </div>
           {/* INFO PACIENTE */}
           <div className="patient-info">

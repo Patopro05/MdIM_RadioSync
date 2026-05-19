@@ -23,8 +23,10 @@ def generate_patient_qr(patient_id):
 
         img = qr.make_image(fill_color="black", back_color="white")
 
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+
         # Crear carpeta de salida
-        qr_folder = os.path.join(os.getcwd(), 'qrs_generados')
+        qr_folder = os.path.join(base_dir, 'backend', 'qrs_generados')
         if not os.path.exists(qr_folder):
             os.makedirs(qr_folder)
 

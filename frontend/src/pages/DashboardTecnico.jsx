@@ -7,11 +7,15 @@ export default function DashboardTecnico() {
 
   const [pacientes, setPacientes] = useState([]);
 
+  const navigate = useNavigate();
+
   // FORM
   const [nombre, setNombre] = useState('');
   const [comentarios, setComentarios] = useState('');
   const [fechaNacimiento, setFechaNacimiento] = useState('');
   const [sexo, setSexo] = useState('');
+  const [peso, setPeso] = useState('');
+  const [estatura, setEstatura] = useState('');
   const [estudio, setEstudio] = useState('');
   const [fechaEstudio, setFechaEstudio] = useState('');
   const [horaEstudio, setHoraEstudio] = useState('');
@@ -57,6 +61,8 @@ export default function DashboardTecnico() {
         comentarios: comentarios,
         fecha_nacimiento: fechaNacimiento,
         sexo: sexo,
+        peso_kg: peso,
+        estatura_cm: estatura,
         tipo_estudio: estudio,
         fecha_estudio: fechaEstudio,
         hora_estudio: horaEstudio
@@ -76,9 +82,9 @@ export default function DashboardTecnico() {
 
       setQrGenerado(respuesta.data.id);
       
-      const navigate = useNavigate();
+      //const navigate = useNavigate();
 
-      navigate('/qr-generados', {
+      navigate('/qr-generado', {
             state: {
               qr: respuesta.data.qr_url,
               nombre: respuesta.data.nombre,
@@ -93,6 +99,8 @@ export default function DashboardTecnico() {
       setComentarios('');
       setFechaNacimiento('');
       setSexo('');
+      setPeso('');
+      setEstatura('');
       setEstudio('');
       setFechaEstudio('');
       setHoraEstudio('');
@@ -124,6 +132,7 @@ export default function DashboardTecnico() {
                 <th>NOMBRE</th>
                 <th>ESTUDIO</th>
                 <th>HORARIO</th>
+                <th>ACCIONES</th>
               </tr>
             </thead>
 
@@ -136,10 +145,24 @@ export default function DashboardTecnico() {
                   <td>{paciente.nombre}</td>
                   <td>{paciente.tipo_estudio}</td>
                   <td>{paciente.hora_estudio}</td>
-                </tr>
-
+                  <td>
+                    <button
+                    className = "register-btn"
+                    style = {{padding: '5px 10px', fontSize: '10 px'}}
+                    onClick = {() => navigate('/qr-generado', {
+                       state: {
+                         qr: paciente.qr_url, 
+                         nombre: paciente.nombre,
+                         id: paciente.id,
+                         estudio: paciente.tipo_estudio
+                       }
+                      })}
+                    >
+                      Ver QR
+                    </button>
+                   </td>
+                 </tr>
               ))}
-
             </tbody>
 
           </table>
@@ -214,7 +237,28 @@ export default function DashboardTecnico() {
               </div>
 
             </div>
-
+           <div className="row">
+              <div className="input-box">
+                <label>Peso (kg)</label>
+                <input
+                  type="number"
+                  step="0.1"
+                  value={peso}
+                  onChange={(e) => setPeso(e.target.value)}
+                  required
+                />
+              </div>
+            <div className="input-box">
+                <label>Estatura (cm)</label>
+                <input
+                  type="number"
+                  step="0.1"
+                  value={estatura}
+                  onChange={(e) => setEstatura(e.target.value)}
+                  required
+                />
+              </div>
+            </div>
             <div className="row">
 
               <div className="input-box">
