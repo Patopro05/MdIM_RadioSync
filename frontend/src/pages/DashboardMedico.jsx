@@ -140,7 +140,7 @@ function DashboardMedico() {
               gap: '8px'
             }}
           >
-            {esPaciente ? "🚪 Salir de mi Portal" : "🚪 Salir del sistema"}
+            {esPaciente ? "Salir de mi expediente" : "Salir del sistema"}
           </button>
         </div>
 

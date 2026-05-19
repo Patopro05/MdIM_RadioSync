@@ -7,7 +7,7 @@ export default function DashboardTecnico() {
   const [pacientes, setPacientes] = useState([]);
   const navigate = useNavigate();
 
-  // FORM
+  // FORM STATES
   const [nombre, setNombre] = useState('');
   const [comentarios, setComentarios] = useState('');
   const [fechaNacimiento, setFechaNacimiento] = useState('');
@@ -20,50 +20,38 @@ export default function DashboardTecnico() {
 
   const [qrGenerado, setQrGenerado] = useState(null);
 
+  // 1. CARGA INICIAL DE PACIENTES
   useEffect(() => {
     const cargarPacientes = async () => {
       try {
         const token = localStorage.getItem('access_token');
-        const respuesta = await axios.get(
-          'http://127.0.0.1:8000/api/pacientes/',
-          {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          }
-        );
-        const resListaFresca = await axios.get('http://127.0.0.1:8000/api/pacientes/', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      setPacientes(resListaFresca.data);
-
+        const respuesta = await axios.get('http://127.0.0.1:8000/api/pacientes/', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
         setPacientes(respuesta.data);
       } catch (error) {
-        console.error(error);
+        console.error("Error al cargar pacientes:", error);
       }
     };
     cargarPacientes();
   }, []);
 
-  // FUNCIÓN PARA SALIR DEL SISTEMA
   const handleLogout = () => {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
     localStorage.removeItem('paciente');
-    navigate('/personal'); // Ajusta esto si tu login está en '/'
+    navigate('/personal');
   };
 
   const handleRegistro = async (e) => {
     e.preventDefault();
-
     try {
       const token = localStorage.getItem('access_token');
-
       const datosAEnviar = {
-        nombre: nombre,
-        comentarios: comentarios,
+        nombre,
+        comentarios,
         fecha_nacimiento: fechaNacimiento,
-        sexo: sexo,
+        sexo,
         peso_kg: peso,
         estatura_cm: estatura,
         tipo_estudio: estudio,
@@ -74,36 +62,29 @@ export default function DashboardTecnico() {
       const respuesta = await axios.post(
         'http://127.0.0.1:8000/api/pacientes/',
         datosAEnviar,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      setPacientes([...pacientes, respuesta.data]);
+      // Actualizamos la lista con la respuesta fresca del server
+      const resLista = await axios.get('http://127.0.0.1:8000/api/pacientes/', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setPacientes(resLista.data);
+
       setQrGenerado(respuesta.data.id);
       
-      // NAVEGACIÓN CORREGIDA AL QR
       navigate('/qr-generado', {
-            state: {
-              qr: respuesta.data.qr_url,
-              nombre: respuesta.data.nombre,
-              id: respuesta.data.id,
-              estudio: respuesta.data.tipo_estudio // <--- ¡AQUÍ ESTABA EL DETALLE!
-            }
-          });
+        state: {
+          qr: respuesta.data.qr_url,
+          nombre: respuesta.data.nombre,
+          id: respuesta.data.id,
+          estudio: respuesta.data.tipo_estudio
+        }
+      });
 
-      // LIMPIAR FORM
-      setNombre('');
-      setComentarios('');
-      setFechaNacimiento('');
-      setSexo('');
-      setPeso('');
-      setEstatura('');
-      setEstudio('');
-      setFechaEstudio('');
-      setHoraEstudio('');
+      // Reset Form
+      setNombre(''); setComentarios(''); setFechaNacimiento(''); setSexo('');
+      setPeso(''); setEstatura(''); setEstudio(''); setFechaEstudio(''); setHoraEstudio('');
 
     } catch (error) {
       console.error(error);
@@ -115,31 +96,38 @@ export default function DashboardTecnico() {
     <div className="dashboard-container">
       <div className="dashboard-overlay">
 
-        {/* BOTÓN DE SALIR */}
-        <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%', marginBottom: '15px' }}>
-          <button 
-            onClick={handleLogout} 
-            style={{ 
-              background: '#e40000', 
-              color: 'white', 
-              border: 'none', 
-              padding: '10px 20px', 
-              borderRadius: '8px', 
-              cursor: 'pointer', 
-              fontWeight: 'bold',
-              display: 'flex',
-              alignItems: 'center',
-              width: 'max-content', 
-              height: 'fit-content',
-              gap: '8px'
-            }}
-          >
-            Salir de recepción
-          </button>
-        </div>
-
+        {/* --- PANEL IZQUIERDO: SALA DE ESPERA --- */}
         <div className="waiting-room">
-          <h1>SALA DE ESPERA</h1>
+          
+          {/* HEADER DE LA TABLA: Título y Botón de Salir juntos */}
+          <div style={{ 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            alignItems: 'center', 
+            marginBottom: '15px' 
+          }}>
+            <h1 style={{ margin: 0, fontSize: '1.2rem' }}>SALA DE ESPERA</h1>
+            
+            <button 
+              onClick={handleLogout} 
+              style={{ 
+                background: '#e40000', 
+                color: 'white', 
+                border: 'none', 
+                padding: '6px 12px', 
+                borderRadius: '6px', 
+                cursor: 'pointer', 
+                fontWeight: 'bold',
+                fontSize: '13px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '5px'
+              }}
+            >
+              Salir
+            </button>
+          </div>
+
           <table>
             <thead>
               <tr>
@@ -159,144 +147,106 @@ export default function DashboardTecnico() {
                   <td>{paciente.hora_estudio}</td>
                   <td>
                     <button
-                    className = "register-btn"
-                    style = {{padding: '5px 10px', fontSize: '10px'}}
-                    onClick = {() => navigate('/qr-generado', {
-                       state: {
-                         qr: paciente.qr_url, 
-                         nombre: paciente.nombre,
-                         id: paciente.id,
-                         estudio: paciente.tipo_estudio
-                       }
+                      className="register-btn"
+                      style={{ padding: '4px 8px', fontSize: '11px', marginTop: 0 }}
+                      onClick={() => navigate('/qr-generado', {
+                        state: {
+                          qr: paciente.qr_url, 
+                          nombre: paciente.nombre,
+                          id: paciente.id,
+                          estudio: paciente.tipo_estudio
+                        }
                       })}
                     >
                       Ver QR
                     </button>
-                   </td>
-                 </tr>
+                  </td>
+                </tr>
               ))}
             </tbody>
           </table>
         </div>
 
-        {/* FORMULARIO */}
+        {/* --- PANEL DERECHO: FORMULARIO --- */}
         <div className="patient-form">
           <h1>DATOS DEL PACIENTE</h1>
+          
           <form onSubmit={handleRegistro}>
-            {/* NOMBRE */}
             <div className="input-box">
               <label>Nombre completo</label>
-              <input
-                type="text"
-                value={nombre}
-                onChange={(e) => setNombre(e.target.value)}
-                required
-              />
+              <input type="text" value={nombre} onChange={(e) => setNombre(e.target.value)} required />
               <span>*Obligatorio</span>
             </div>
 
             <div className="input-box">
               <label>Comentarios</label>
-              <input
-                type="text"
-                value={comentarios}
-                onChange={(e) => setComentarios(e.target.value)}
-              />
+              <input type="text" value={comentarios} onChange={(e) => setComentarios(e.target.value)} />
             </div>
 
             <div className="row">
               <div className="input-box">
                 <label>Fecha de Nacimiento</label>
-                <input
-                  type="date"
-                  value={fechaNacimiento}
-                  onChange={(e) => setFechaNacimiento(e.target.value)}
-                />
+                <input type="date" value={fechaNacimiento} onChange={(e) => setFechaNacimiento(e.target.value)} />
               </div>
               <div className="input-box">
                 <label>Sexo</label>
-                <select 
-                  value={sexo}
-                  onChange={(e) => setSexo(e.target.value)}
-                >
-                  <option className="option-list" value="">Seleccione</option>
-                  <option className="option-list" value="M">Masculino</option>
-                  <option className="option-list"  value="F">Femenino</option>
-                  <option className="option-list" value="O">Otro</option>
+                <select value={sexo} onChange={(e) => setSexo(e.target.value)}>
+                  <option value="">Seleccione</option>
+                  <option value="M">Masculino</option>
+                  <option value="F">Femenino</option>
+                  <option value="O">Otro</option>
                 </select>
               </div>
             </div>
 
-           <div className="row">
+            <div className="row">
               <div className="input-box">
                 <label>Peso (kg)</label>
-                <input
-                  type="number"
-                  step="0.1"
-                  value={peso}
-                  onChange={(e) => setPeso(e.target.value)}
-                  required
-                />
+                <input type="number" step="0.1" value={peso} onChange={(e) => setPeso(e.target.value)} required />
               </div>
-            <div className="input-box">
+              <div className="input-box">
                 <label>Estatura (cm)</label>
-                <input
-                  type="number"
-                  step="0.1"
-                  value={estatura}
-                  onChange={(e) => setEstatura(e.target.value)}
-                  required
-                />
+                <input type="number" step="0.1" value={estatura} onChange={(e) => setEstatura(e.target.value)} required />
               </div>
             </div>
 
             <div className="row">
               <div className="input-box">
                 <label>Estudio</label>
-                <select
-                  value={estudio}
-                  onChange={(e) => setEstudio(e.target.value)}
-                >
-                  <option className="option-list" value="">Seleccione</option>
-                  <option className="option-list" value="Rayos X">Rayos X</option>
-                  <option className="option-list" value="Tomografía">Tomografía</option>
-                  <option className="option-list" value="Resonancia">Resonancia</option>
+                <select value={estudio} onChange={(e) => setEstudio(e.target.value)}>
+                  <option value="">Seleccione</option>
+                  <option value="Rayos X">Rayos X</option>
+                  <option value="Tomografía">Tomografía</option>
+                  <option value="Resonancia">Resonancia</option>
                 </select>
               </div>
 
               <div className="input-box">
                 <label>Fecha y Hora</label>
                 <div className="datetime">
-                  <input
-                    type="date"
-                    value={fechaEstudio}
-                    onChange={(e) => setFechaEstudio(e.target.value)}
-                  />
-                  <input
-                    type="time"
-                    value={horaEstudio}
-                    onChange={(e) => setHoraEstudio(e.target.value)}
-                  />
+                  <input type="date" value={fechaEstudio} onChange={(e) => setFechaEstudio(e.target.value)} />
+                  <input type="time" value={horaEstudio} onChange={(e) => setHoraEstudio(e.target.value)} />
                 </div>
               </div>
             </div>
 
-            {/* BOTON */}
             <button type="submit" className="register-btn">
               REGISTRAR Y GENERAR QR
             </button>
           </form>
 
-          {/* QR */}
           {qrGenerado && (
             <div className="qr-box">
-              <h3>QR GENERADO</h3>
-              <div className="fake-qr">
-                {qrGenerado}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                <h3 style={{ fontSize: '14px', margin: 0 }}>QR LISTO:</h3>
+                <div className="fake-qr" style={{ width: '60px', height: '60px', fontSize: '0.8rem' }}>
+                  {qrGenerado}
+                </div>
               </div>
             </div>
           )}
         </div>
+
       </div>
     </div>
   );
