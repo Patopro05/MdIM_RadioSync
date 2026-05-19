@@ -4,9 +4,7 @@ import axios from 'axios';
 import './DashboardTecnico.css';
 
 export default function DashboardTecnico() {
-
   const [pacientes, setPacientes] = useState([]);
-
   const navigate = useNavigate();
 
   // FORM
@@ -25,9 +23,7 @@ export default function DashboardTecnico() {
   useEffect(() => {
     const cargarPacientes = async () => {
       try {
-
         const token = localStorage.getItem('access_token');
-
         const respuesta = await axios.get(
           'http://127.0.0.1:8000/api/pacientes/',
           {
@@ -36,24 +32,31 @@ export default function DashboardTecnico() {
             }
           }
         );
+        const resListaFresca = await axios.get('http://127.0.0.1:8000/api/pacientes/', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setPacientes(resListaFresca.data);
 
         setPacientes(respuesta.data);
-
       } catch (error) {
         console.error(error);
       }
     };
-
     cargarPacientes();
-
   }, []);
 
-  const handleRegistro = async (e) => {
+  // FUNCIÓN PARA SALIR DEL SISTEMA
+  const handleLogout = () => {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
+    localStorage.removeItem('paciente');
+    navigate('/personal'); // Ajusta esto si tu login está en '/'
+  };
 
+  const handleRegistro = async (e) => {
     e.preventDefault();
 
     try {
-
       const token = localStorage.getItem('access_token');
 
       const datosAEnviar = {
@@ -79,19 +82,16 @@ export default function DashboardTecnico() {
       );
 
       setPacientes([...pacientes, respuesta.data]);
-
       setQrGenerado(respuesta.data.id);
       
-      //const navigate = useNavigate();
-
+      // NAVEGACIÓN CORREGIDA AL QR
       navigate('/qr-generado', {
             state: {
               qr: respuesta.data.qr_url,
               nombre: respuesta.data.nombre,
               id: respuesta.data.id,
-              estudio: respuesta.data.estudio
+              estudio: respuesta.data.tipo_estudio // <--- ¡AQUÍ ESTABA EL DETALLE!
             }
-
           });
 
       // LIMPIAR FORM
@@ -106,26 +106,41 @@ export default function DashboardTecnico() {
       setHoraEstudio('');
 
     } catch (error) {
-
       console.error(error);
-
       alert('No se pudo registrar');
-
     }
   };
 
   return (
-
     <div className="dashboard-container">
-
       <div className="dashboard-overlay">
 
+        {/* BOTÓN DE SALIR */}
+        <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%', marginBottom: '15px' }}>
+          <button 
+            onClick={handleLogout} 
+            style={{ 
+              background: '#e40000', 
+              color: 'white', 
+              border: 'none', 
+              padding: '10px 20px', 
+              borderRadius: '8px', 
+              cursor: 'pointer', 
+              fontWeight: 'bold',
+              display: 'flex',
+              alignItems: 'center',
+              width: 'max-content', 
+              height: 'fit-content',
+              gap: '8px'
+            }}
+          >
+            Salir de recepción
+          </button>
+        </div>
+
         <div className="waiting-room">
-
           <h1>SALA DE ESPERA</h1>
-
           <table>
-
             <thead>
               <tr>
                 <th>ID/QR</th>
@@ -135,11 +150,8 @@ export default function DashboardTecnico() {
                 <th>ACCIONES</th>
               </tr>
             </thead>
-
             <tbody>
-
               {pacientes.map((paciente, index) => (
-
                 <tr key={index}>
                   <td>{paciente.id}</td>
                   <td>{paciente.nombre}</td>
@@ -148,7 +160,7 @@ export default function DashboardTecnico() {
                   <td>
                     <button
                     className = "register-btn"
-                    style = {{padding: '5px 10px', fontSize: '10 px'}}
+                    style = {{padding: '5px 10px', fontSize: '10px'}}
                     onClick = {() => navigate('/qr-generado', {
                        state: {
                          qr: paciente.qr_url, 
@@ -164,66 +176,45 @@ export default function DashboardTecnico() {
                  </tr>
               ))}
             </tbody>
-
           </table>
-
         </div>
 
         {/* FORMULARIO */}
         <div className="patient-form">
-
           <h1>DATOS DEL PACIENTE</h1>
-
           <form onSubmit={handleRegistro}>
-
             {/* NOMBRE */}
             <div className="input-box">
-
               <label>Nombre completo</label>
-
               <input
                 type="text"
                 value={nombre}
                 onChange={(e) => setNombre(e.target.value)}
                 required
               />
-
               <span>*Obligatorio</span>
-
             </div>
 
             <div className="input-box">
-
               <label>Comentarios</label>
-
               <input
                 type="text"
                 value={comentarios}
                 onChange={(e) => setComentarios(e.target.value)}
               />
-
-              <span>*Obligatorio</span>
-
             </div>
 
             <div className="row">
-
               <div className="input-box">
-
                 <label>Fecha de Nacimiento</label>
-
                 <input
                   type="date"
                   value={fechaNacimiento}
                   onChange={(e) => setFechaNacimiento(e.target.value)}
                 />
-
               </div>
-
               <div className="input-box">
-
                 <label>Sexo</label>
-
                 <select 
                   value={sexo}
                   onChange={(e) => setSexo(e.target.value)}
@@ -233,10 +224,9 @@ export default function DashboardTecnico() {
                   <option className="option-list"  value="F">Femenino</option>
                   <option className="option-list" value="O">Otro</option>
                 </select>
-
               </div>
-
             </div>
+
            <div className="row">
               <div className="input-box">
                 <label>Peso (kg)</label>
@@ -259,12 +249,10 @@ export default function DashboardTecnico() {
                 />
               </div>
             </div>
+
             <div className="row">
-
               <div className="input-box">
-
                 <label>Estudio</label>
-
                 <select
                   value={estudio}
                   onChange={(e) => setEstudio(e.target.value)}
@@ -274,60 +262,42 @@ export default function DashboardTecnico() {
                   <option className="option-list" value="Tomografía">Tomografía</option>
                   <option className="option-list" value="Resonancia">Resonancia</option>
                 </select>
-
               </div>
 
               <div className="input-box">
-
                 <label>Fecha y Hora</label>
-
                 <div className="datetime">
-
                   <input
                     type="date"
                     value={fechaEstudio}
                     onChange={(e) => setFechaEstudio(e.target.value)}
                   />
-
                   <input
                     type="time"
                     value={horaEstudio}
                     onChange={(e) => setHoraEstudio(e.target.value)}
                   />
-
                 </div>
-
               </div>
-
             </div>
 
             {/* BOTON */}
             <button type="submit" className="register-btn">
               REGISTRAR Y GENERAR QR
             </button>
-
           </form>
 
           {/* QR */}
           {qrGenerado && (
-
             <div className="qr-box">
-
               <h3>QR GENERADO</h3>
-
               <div className="fake-qr">
                 {qrGenerado}
               </div>
-
             </div>
-
           )}
-
         </div>
-
       </div>
-
     </div>
-
   );
 }

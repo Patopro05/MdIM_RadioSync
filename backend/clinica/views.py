@@ -1,5 +1,6 @@
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
 from django.contrib.auth.models import User
 from django.conf import settings
 from .models import Paciente
@@ -8,7 +9,9 @@ import qrcode
 import os
 from datetime import date # <-- NUEVO IMPORT PARA CALCULAR LA EDAD
 
+
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def login_qr_paciente(request):
     qr_data = request.data.get('qr_code') 
     

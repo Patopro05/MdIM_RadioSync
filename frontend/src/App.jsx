@@ -14,11 +14,14 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/personal" element={<LoginPersonal />} />
+        
         <Route path="/paciente" element={<LoginPaciente />} />
+                
         <Route path="/medico" element={<DashboardMedico />} />
         <Route path="/tecnico" element={<DashboardTecnico />} />
         <Route path="/qr-generado" element={<QRSuccess />} />
-        <Route path="*" element={<h1 style={{textAlign: 'center', marginTop: '50px'}}>Error 404: Esta página no existe todavía, siguelo revisando</h1>} />
+        
+        <Route path="*" element={<h1 style={{textAlign: 'center', marginTop: '50px'}}>Error 404: Esta página no existe todavía, síguelo revisando</h1>} />
       </Routes>
     </BrowserRouter>
   );

@@ -8,6 +8,10 @@ class Paciente(models.Model):
     sexo = models.CharField(max_length=1, choices=[('M', 'Masculino'), ('F', 'Femenino'), ('O', 'Otro')])
     peso_kg = models.DecimalField(max_digits=5, decimal_places=2, help_text="Peso en kilogramos")
     estatura_cm = models.IntegerField(help_text="Estatura en centímetros")
+    tipo_estudio = models.CharField(max_length=100, default="Rayos X", null=True, blank=True)
+    hora_estudio = models.CharField(max_length=50, default="Por definir", null=True, blank=True)
+    estatus = models.CharField(max_length=50, default="En espera", null=True, blank=True)
+    comentarios = models.TextField(default="", null=True, blank=True)
     
     # Datos de contacto
     telefono = models.CharField(max_length=20, blank=True, null=True)
